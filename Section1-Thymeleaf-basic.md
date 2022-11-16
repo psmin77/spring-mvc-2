@@ -26,3 +26,25 @@
   - 불린 연산
   - 비교와 동등
   - 조건 연산 등
+  
+### 텍스트 - text, utext
+- 일반 텍스트 출력(text)
+  ~~~html
+  <span th:text="${data}"></span>
+  <span>[[${data}]]</span>
+  ~~~
+  - Escape
+    - 출력 데이터에 HTML 태그가 있는 경우, 일반 문자인 HTML 엔티티로 변경하는 것
+    - < : & lt;
+    - \> : & gt;
+    
+- Unescape(utext)
+  - 이스케이프 기능을 사용하지 않음(태그 인식하여 사용)
+  ~~~html
+  <span th:utext="${data}"></span>
+  <span>[(${data})]</span>
+  ~~~
+<br>
+  
+>
+[출처] 스프링 MVC 2 - 김영한, 인프런
