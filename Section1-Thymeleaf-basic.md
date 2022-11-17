@@ -33,8 +33,8 @@
   <span th:text="${data}"></span>
   <span>[[${data}]]</span>
   ~~~
-  - Escape
-    - 출력 데이터에 HTML 태그가 있는 경우, 일반 문자인 HTML 엔티티로 변경하는 것
+- Escape
+  - 출력 데이터에 HTML 태그가 있는 경우, 일반 문자인 HTML 엔티티로 변경하는 것 (기본 설정)
     - < : & lt;
     - \> : & gt;
     
@@ -43,6 +43,29 @@
   ~~~html
   <span th:utext="${data}"></span>
   <span>[(${data})]</span>
+  ~~~
+  
+### 변수 - SpringEL
+- 변수 표현식: ${...}
+- (예) user 객체의 username = userA
+  - Object(user)
+    - user.username
+    - user['username']
+    - user.getUsername()
+  - List(users)
+    - users[0].username
+    - users[0]['username']
+    - users[0].getUsername()
+  - Map(userMap)
+    - userMap['userA'].username
+    - userMap['userA']['username']
+    - userMap['userA'].getUsername()
+- 지역 변수: _th:with_
+  - 선언한 태그 안에서만 사용 가능
+  ~~~ html
+  <div th:with="first=${users[0]}">
+      <p>첫 번째 이름: <span th:text="${first.username}"></span></p>
+  </div>
   ~~~
 <br>
   
