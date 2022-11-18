@@ -26,27 +26,30 @@
   - 불린 연산
   - 비교와 동등
   - 조건 연산 등
-  
+<br>
+
 ### 텍스트 - text, utext
-- 일반 텍스트 출력(text)
-  ~~~html
-  <span th:text="${data}"></span>
-  <span>[[${data}]]</span>
-  ~~~
+#### 일반 텍스트 출력(text)
+~~~html
+<span th:text="${data}"></span>
+<span>[[${data}]]</span>
+~~~
 - Escape
   - 출력 데이터에 HTML 태그가 있는 경우, 일반 문자인 HTML 엔티티로 변경하는 것 (기본 설정)
-    - < : & lt;
-    - \> : & gt;
+  - < : & lt;
+  - \> : & gt;
     
-- Unescape(utext)
-  - 이스케이프 기능을 사용하지 않음(태그로 인식하여 사용)
-  ~~~html
-  <span th:utext="${data}"></span>
-  <span>[(${data})]</span>
-  ~~~
-  
+#### Unescape(utext)
+- 이스케이프 기능을 사용하지 않음(태그로 인식하여 사용)
+~~~html
+<span th:utext="${data}"></span>
+<span>[(${data})]</span>
+~~~
+<br>
+
 ### 변수 - SpringEL
-- 변수 표현식: ${...}
+#### 변수 
+- 표현식: ${...}
 - (예) user 객체의 username = userA
   - Object(user)
     - user.username
@@ -60,24 +63,25 @@
     - userMap['userA'].username
     - userMap['userA']['username']
     - userMap['userA'].getUsername()
-- 지역 변수: _th:with_
-  - 선언한 태그 안에서만 사용 가능
-  ~~~ html
-  <div th:with="first=${users[0]}">
-      <p>첫 번째 이름: <span th:text="${first.username}"></span></p>
-  </div>
-  ~~~
+#### 지역 변수
+- 표현식: _th:with_
+- 선언한 태그 안에서만 사용 가능
+~~~ html
+<div th:with="first=${users[0]}">
+    <p>첫 번째 이름: <span th:text="${first.username}"></span></p>
+</div>
+~~~
+<br>
 
 ### 기본 객체들
 - 타임리프 기본 객체들
   - ${#request}
     - HttpServletRequest 객체가 그대로 제공됨
-    - request.getParameter("data") 형식으로 접근해야 함
+    - request.getParameter("data") 형식으로 접근
   - ${#response}
   - ${#session}
   - ${#servletContext}
   - ${locale}
-  
 - HTTP 요청 파라미터 접근: param
   - ${param.paramData}
 - HTTP 세션 접근: session
