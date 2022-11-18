@@ -39,7 +39,7 @@
     - \> : & gt;
     
 - Unescape(utext)
-  - 이스케이프 기능을 사용하지 않음(태그 인식하여 사용)
+  - 이스케이프 기능을 사용하지 않음(태그로 인식하여 사용)
   ~~~html
   <span th:utext="${data}"></span>
   <span>[(${data})]</span>
@@ -67,6 +67,23 @@
       <p>첫 번째 이름: <span th:text="${first.username}"></span></p>
   </div>
   ~~~
+
+### 기본 객체들
+- 타임리프 기본 객체들
+  - ${#request}
+    - HttpServletRequest 객체가 그대로 제공됨
+    - request.getParameter("data") 형식으로 접근해야 함
+  - ${#response}
+  - ${#session}
+  - ${#servletContext}
+  - ${locale}
+  
+- HTTP 요청 파라미터 접근: param
+  - ${param.paramData}
+- HTTP 세션 접근: session
+  - ${session.sessionData}
+- 스프링 빈 접근: @
+  - ${@bean.method()}
 <br>
   
 >
