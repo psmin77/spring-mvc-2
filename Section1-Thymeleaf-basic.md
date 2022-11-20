@@ -109,6 +109,18 @@
 - #lists, #sets, @maps: 컬렉션 관련 기능 제공
 - #ids: 아이디 처리 관련 기능 제공
 <br>
-  
+### URL 링크
+- 단순 경로: @{...}
+- 쿼리 파라미터
+  - @{/link(param1=\${param1}, param2=${param2})}
+  - () 내용이 쿼리 파라미터로 처리
+- 경로 변수(path variable)
+  - @{/link/{param1}/{param2}(param1=\${param1}, param2=${param2})}
+  - 경로 내 변수가 있으면 () 내용이 변수로 처리
+- 경로 변수 + 쿼리 파라미터
+  - @{/link/{param1}(param1=\${param1}, param2${param2})}
+  - 함께 사용할 수 있음
+<br>
+
 >
 [출처] 스프링 MVC 2 - 김영한, 인프런
