@@ -89,7 +89,7 @@
 - 스프링 빈 접근: @
   - ${@bean.method()}
 <br>
-  
+
 ### 유틸리티 객체와 날짜
 #### 타임리프 유틸리티 객체
 - https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#expression-utility-objects
@@ -122,6 +122,15 @@
 - 경로 변수 + 쿼리 파라미터
   - @{/link/{param1}(param1=\${param1}, param2${param2})}
   - 함께 사용할 수 있음
+<br>
+
+### 리터럴(Literal)
+- 소스코드 내 고정된 값 
+- 문자, 숫자, 불린, null
+  - 문자 리터럴은 항상 ''로 감싸야 함
+  - 공백이 없는 경우 생략 가능
+- 리터럴 대체(Literal substitutions)
+  - || 안에 입력하면 리터럴을 템플릿처럼 사용 가능
 <br>
 
 >
