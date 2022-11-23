@@ -151,7 +151,19 @@
   <span th:text="${nullData}?:_">데이터가 없습니다.</span>
   ~~~
   - _인 경우 타임리프가 실행되지 않고 HTML 그대로 사용
-<br>   
+<br>
+
+### 속성 설정
+- 속성 값 설정: _th:*_
+  - 기존 속성을 대체하거나 없으면 새로 만듦
+- 속성 추가
+  - th:attrappend - 속성 값 뒤에 추가
+  - th:attrprepend - 속성 값 앞에 추가
+  - th:classappend - class 속성에 추가
+- checked 속성
+  - 기본 HTML에서는 checked만 사용(true/false 적용 안됨)
+  - th:checked=true/false 적용 가능
+<br>
   
 >
 [출처] 스프링 MVC 2 - 김영한, 인프런
