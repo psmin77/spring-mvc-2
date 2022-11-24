@@ -68,7 +68,7 @@
 - 선언한 태그 안에서만 사용 가능
 ~~~ html
 <div th:with="first=${users[0]}">
-    <p>첫 번째 이름: <span th:text="${first.username}"></span></p>
+  <p>첫 번째 이름: <span th:text="${first.username}"></span></p>
 </div>
 ~~~
 <br>
@@ -164,6 +164,59 @@
   - 기본 HTML에서는 checked만 사용(true/false 적용 안됨)
   - th:checked=true/false 적용 가능
 <br>
-  
+
+### 반복
+- _th:each_
+- List, array, iterable, enumeration, Map 객체 사용 가능
+- 반복 상태 유지 기능
+  - index: 0부터 시작
+  - count: 1부터 시작
+  - size: 전체 사이즈
+  - even/odd: 홀수/짝수(boolean)
+  - first/last: 처음/마지막 여부(boolean)
+  - current: 현재 객체
+<br>
+
+### 조건식
+- if, unless 
+  - 조건이 false인 경우, 태그 자체가 렌더링 되지 않고 사라짐
+- switch
+  ~~~ html
+  <td th:switch="${user.age}">
+    <span th:case="10">10살</span>
+    <span th:case="20">20살</span>
+    <span th:case="*">기타</span>
+  </td>
+  ~~~
+  - 만족하는 조건이 없을 때는 \* 
+<br>
+
+### 주석
+- 표준 HTML 주석
+  - <\!-- -->
+- 타임리프 파서 주석
+  - <\!--/* */-->
+  - 타임리프 렌더링에서 해당 주석 부분이 제거됨
+- 타임리프 프로토타입 주석
+  - <\!--/\*/ /*/-->
+  - HTML 웹 브라우저에서는 주석 처리되지만, 타임리프 렌더링에서는 태그를 실행함
+<br>
+
+### 블록
+- _th:block_
+- 여러 태그를 하나의 단위로 반복하거나 사용하는 경우, 블록으로 묶어서 사용할 수 있음
+~~~ html
+<th:block th:each="user : ${users}">
+  <div>
+    이름 <span th:text="${user.username}"></span>
+    나이 <span th:text="${user.age}"></span>
+  </div>
+  <div> 
+    요약 <span th:text="${user.username}+'/'+${user.age}"></span>
+  </div>
+</th:block>
+~~~
+<br>
+
 >
 [출처] 스프링 MVC 2 - 김영한, 인프런
