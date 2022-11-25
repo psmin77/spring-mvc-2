@@ -2,7 +2,7 @@
 #### 타임리프 특징
 - 서버 사이드 HTML 렌더링 (SSR)
   - 백엔드 서버에서 HTML을 동적으로 렌더링하기 위해 사용
-- 내츄럴 템플릿(Natural Templates)
+- 내추럴 템플릿(Natural Templates)
   - 순수 HTML을 최대한 유지하면서 뷰 템플릿도 사용할 수 있음
 - 스프링 통합 지원
   - 스프링의 다양한 기능을 편리하게 사용할 수 있도록 지원
@@ -215,6 +215,56 @@
     요약 <span th:text="${user.username}+'/'+${user.age}"></span>
   </div>
 </th:block>
+~~~
+<br>
+
+### 자바스크립트 인라인
+~~~ html
+<script th:inline="javascript">
+~~~
+#### 텍스트 렌더링
+- 렌더링 시 문자 타입인 경우 ""를 자동으로 처리 
+- 이스케이프 처리 (\")
+~~~ html
+var username = [[${user.name}]]
+<!-- 인라인 사용 전 -->
+var username = userA
+<!-- 인라인 사용 후 --> 
+var username = "userA"
+~~~
+
+#### 내추럴 템플릿
+- /*...\*/
+- 인라인 사용 시 주석 부분을 태그로 실행함
+~~~ html
+var username2 = /*[[${user.name}]]*/ "test username";
+<!-- 인라인 사용 전 -->
+var username2 = /*userA*/ "test username"
+<!-- 인라인 사용 후 --> 
+var username2 = "userA"
+~~~
+
+#### 객체
+- 객체를 자동으로 JSON 변환
+- 인라인 사용 전은 객체의 toString()
+- 인라인 사용 후에 객체를 JSON 변환
+
+#### 인라인 each
+- 자바스크립트 인라인에서 each 지원
+~~~ html
+<!-- 자바스크립트 인라인 each -->
+<script th:inline="javascript">
+  [# th:each="user, stat : ${users}"]
+  var user[[${stat.count}]] = [[${user}]];
+  [/]
+</script>
+
+<!-- 실행 결과 -->
+<script>
+  var user1 = {"username":"userA","age":10};
+  var user2 = {"username":"userB","age":20};
+  var user3 = {"username":"userC","age":30};
+</script>
 ~~~
 <br>
 
