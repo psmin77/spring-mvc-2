@@ -268,5 +268,17 @@ var username2 = "userA"
 ~~~
 <br>
 
+### 템플릿 조각
+- 상단, 하단, 카테고리 등 공통 영역을 템플릿 조각으로 만들어 사용
+- _th:fragment="name"_
+  - 다른 곳에 포함되는 코드 조각
+- "~{경로 :: name(param1, param2)}"
+  - 해당 경로에 있는 name 코드 조각을 가져와 사용
+  - 파라미터 전달 가능
+  - ~{...}를 사용하는 것이 원칙이지만 생략 가능
+    - _th:insert="~{footer.html :: test}" -> th:insert="footer.html :: test"_
+- _th:insert_: 현재 코드 내부에 삽입 
+- _th:replace_: 현재 코드 대체하여 삽입
+
 >
 [출처] 스프링 MVC 2 - 김영한, 인프런
