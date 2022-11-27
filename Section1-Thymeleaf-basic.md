@@ -279,6 +279,62 @@ var username2 = "userA"
     - _th:insert="~{footer.html :: test}" -> th:insert="footer.html :: test"_
 - _th:insert_: 현재 코드 내부에 삽입 
 - _th:replace_: 현재 코드 대체하여 삽입
+<br>
+
+### 템플릿 레이아웃
+#### 템플릿 레이아웃
+~~~ html
+<head th:fragment="common_header(title,links)">
+  <title th:replace="${title}">레이아웃 타이틀</title>
+  ...
+  <!-- 추가 -->
+  <th:block th:replace="${links}"/>
+~~~
+- _th:replace="... :: common_header(~{::title},~{::link})"_
+  - ::title - 현재 페이지의 title 태그들을 전달
+  - ::link - 현재 페이지의 link 태그들을 전달
+
+#### 템플릿 레이아웃 확장
+- html 전체에도 적용 가능
+- _전체 레이아웃 예시_
+~~~ html
+<html th:fragment="layout (title, content)" 
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:replace="${title}">레이아웃 타이틀</title>
+</head>
+
+<body>
+  <h1>레이아웃 H1</h1>
+  
+  <div th:replace="${content}">
+    <p>레이아웃 컨텐츠</p>
+  </div>
+
+  <footer> 레이아웃 푸터 </footer>
+</body>
+</html>
+~~~
+
+- _메인 페이지 예시_
+~~~ html
+<html th:replace="~{template/layoutExtend/layoutFile :: layout(~{::title},~{::section})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>메인 페이지 타이틀</title>
+</head>
+
+<body>
+  <section>
+    <p>메인 페이지 컨텐츠</p>
+    <div>메인 페이지 포함 내용</div>
+  </section>
+</body>
+</html>
+~~~
+- 전체 레이아웃 페이지를 replace하여 기본으로 적용
+- 필요한 내용은 title, content와 같이 부분적으로 변경함
+<br>
 
 >
 [출처] 스프링 MVC 2 - 김영한, 인프런
