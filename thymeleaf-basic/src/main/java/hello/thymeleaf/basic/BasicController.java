@@ -126,6 +126,11 @@ public class BasicController {
         return "basic/javascript";
     }
 
+    @GetMapping("/layout")
+    public String layout(){
+        return "template/layout/layoutMain";
+    }
+
     private void addUsers(Model model){
         List<User> list = new ArrayList<>();
         list.add(new User("userA", 10));
