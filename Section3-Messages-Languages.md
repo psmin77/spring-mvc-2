@@ -49,19 +49,11 @@ spring.messages.basename=message
 - #{...} 표현식 사용
   - #{label.item, item.itemName, etc.}
 - 파라미터의 경우
-  - hello.name=안녕 {0}
-  - th:text="#{hello.name(${item.itemName})}"
+  - th:text="#{key(${파라미터})}"
 
 #### 국제화
-- 웹 브라우저 언어 설정에 따라 자동 적용
-- _messages_en.properties_
-~~~
-label.item=Item
-label.item.id=Item ID
-label.item.itemName=Item Name
-label.item.price=price
-label.item.quantity=quantity
-~~~
+- 언어/국가별 파일만 생성하면 웹 브라우저 언어 설정에 따라 자동 적용
+- _messages_en.properties, messages_ko.properties_
 <br>
 
 >
