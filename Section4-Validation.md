@@ -99,8 +99,8 @@ public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, 
     return "validation/v2/addForm";
   }
 ~~~
-- BindingResult : 스프링 오류 검증 기능
-- bindingResult 파라미터는 @ModelAttribute 다음에 위치해야 함
+- BindingResult : 스프링이 제공하는 검증 오류 기능
+- _반드시 BindingResult 파라미터는 검증할 대상(@ModelAttribute) 다음에 위치해야 함_
 - FieldError(String objectname, String field, String defaultMessage)
   - objectName : @ModelAttribute 이름
   - field : 오류 발생한 필드 이름
@@ -128,5 +128,14 @@ public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, 
 - th:errorclass : 지정한 필드에 오류가 있으면 class 정보 추가
 <br>
 
+##### @ModelAttribute 바인딩 타입 오류 발생 시
+- BindingResult가 없으면, 400 오류 페이지로 이동
+- BindingResult가 있으면, 오류 정보(FieldError)를 BindingResult에 담아서 컨트롤러 정상 호출
+
+##### BindingResult와 Errors
+- BingdingResult는 Errors 인터페이스를 상속받는 인터페이스
+- Errors는 단순 오류 저장과 조회 기능을 제공
+- BindingResult는 추가적인 기능을 제공하기 때문에, 주로 관례상 BindingResult를 사용함
+<br>
 
 > [출처] 스프링 MVC 2 - 김영한, 인프런
