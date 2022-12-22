@@ -100,7 +100,7 @@ public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, 
   }
 ~~~
 - BindingResult : 스프링이 제공하는 검증 오류 기능
-- _반드시 BindingResult 파라미터는 검증할 대상(@ModelAttribute) 다음에 위치해야 함_
+- _! BindingResult 파라미터는 반드시 검증할 대상(@ModelAttribute) 다음에 위치해야 함_
 - FieldError(String objectname, String field, String defaultMessage)
   - objectName : @ModelAttribute 이름
   - field : 오류 발생한 필드 이름
@@ -136,6 +136,35 @@ public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, 
 - BingdingResult는 Errors 인터페이스를 상속받는 인터페이스
 - Errors는 단순 오류 저장과 조회 기능을 제공
 - BindingResult는 추가적인 기능을 제공하기 때문에, 주로 관례상 BindingResult를 사용함
+<br>
+
+### FieldError, ObjectError
+#### FieldError, ObjectError 생성자
+~~~ java
+// ObjectError도 유사한 생성자 제공
+public FieldError(String objectName, String field, String defaultMessage);
+public FieldError(String objectName, String field, @Nullable Object rejectedValue, boolean bindingFailure, @Nullable String[] codes, @Nullable Object[] arguments, @Nullable String defaultMessage)
+~~~
+- objectNmae : 오류가 발생한 객체 이름
+- field : 오류 필드
+- rejectedValue : 사용자가 입력한 값 (거절된 값)
+  - 오류 발생 시 사용자가 입력한 값을 유지할 수 있음
+- bindingFailure : 타입 오류 구분 (바인딩 실패 or 검증 실패인지)
+- codes : 메시지 코드
+- arguments : 메시지에서 사용하는 인자
+- defaultMessage : 기본 오류 메시지
+
+#### 타임리프 사용자 입력 값 유지
+- th:field="*{...}"
+  - 일반적인 상황에서는 모델 객체의 값을 사용함
+  - 오류가 발생하는 경우, FieldError에서 보관한 값을 사용함
+
+#### 스프링 바인딩 오류 처리
+- 타입 오류로 바인딩에 실패하는 경우, 스프링은 FieldError를 생성하여 사용자가 입력한 값을 넣은 뒤 BindingResult에 담아 컨트롤러를 호출함
+<br>
+
+
+
 <br>
 
 > [출처] 스프링 MVC 2 - 김영한, 인프런
