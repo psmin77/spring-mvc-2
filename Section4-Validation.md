@@ -7,7 +7,8 @@
   - 수량: 최대 9999개
 - 특정 필드의 범위 검증
   - 가격 * 수량의 합은 10,000원 이상
-  
+<br>
+
 ### 프로젝트 V1
 ~~~ java
 @PostMapping("/add")
@@ -74,7 +75,7 @@ public String addItem(@ModelAttribute Item item, RedirectAttributes redirectAttr
 <br>
 
 ### 프로젝트 V2
-#### BindingResult
+#### BindingResult (addItemV1)
 ~~~ java
 @PostMapping("/add")
 public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
@@ -139,7 +140,7 @@ public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, 
 <br>
 
 ### FieldError, ObjectError
-#### FieldError, ObjectError 생성자
+#### FieldError, ObjectError 생성자 (addItemV2)
 ~~~ java
 // ObjectError도 유사한 생성자 제공
 public FieldError(String objectName, String field, String defaultMessage);
@@ -163,8 +164,30 @@ public FieldError(String objectName, String field, @Nullable Object rejectedValu
 - 타입 오류로 바인딩에 실패하는 경우, 스프링은 FieldError를 생성하여 사용자가 입력한 값을 넣은 뒤 BindingResult에 담아 컨트롤러를 호출함
 <br>
 
-
-
+### 오류 코드와 메시지 처리 1
+#### Errors.properties (addItemV3)
+- 스프링 부트 메시지 설정 추가
+- _application.properties_
+~~~
+spring.messages.basename = messages, errors
+~~~
+- _errors.properties_
+~~~
+required.item.itemName=상품 이름은 필수입니다.
+range.item.price=가격은 {0} ~ {1} 까지 허용합니다.
+max.item.quantity=수량은 최대 {0} 까지 허용합니다.
+totalPriceMin=가격 * 수량의 합은 {0}원 이상이어야 합니다. 현재 값 = {1}
+~~~
+- _controller(addItemV3)_
+~~~java
+bindingResult.addError(new FieldError
+  ("item", "price", item.getPrice(), false,
+    new String[]{"range.item.price"}, 
+    new Object[]{1000, 1000000}, null));
+// "가격은 1000 ~ 1000000 까지 허용합니다."
+~~~
+- codes : properties에 설정된 메시지 코드 지정. 배열로 여러 값을 전달하여 순서대로 매칭함
+- arguments : Object[]{...} 배열로 지정하여 코드의 {0},{1}로 치환할 값을 전달함
 <br>
 
 > [출처] 스프링 MVC 2 - 김영한, 인프런
