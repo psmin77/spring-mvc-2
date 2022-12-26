@@ -139,8 +139,7 @@ public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, 
 - BindingResult는 추가적인 기능을 제공하기 때문에, 주로 관례상 BindingResult를 사용함
 <br>
 
-### FieldError, ObjectError
-#### FieldError, ObjectError 생성자 (addItemV2)
+#### FieldError, ObjectError (addItemV2)
 ~~~ java
 // ObjectError도 유사한 생성자 제공
 public FieldError(String objectName, String field, String defaultMessage);
@@ -188,6 +187,35 @@ bindingResult.addError(new FieldError
 ~~~
 - codes : properties에 설정된 메시지 코드 지정. 배열로 여러 값을 전달하여 순서대로 매칭함
 - arguments : Object[]{...} 배열로 지정하여 코드의 {0},{1}로 치환할 값을 전달함
+<br>
+
+### 오류 코드와 메시지 처리 2
+#### rejectValue, reject (addItemV4)
+~~~java
+void rejectValue (@Nullable String field, String errorCode, 
+                  @Nullable Object[] errorArgs, @Nullable String defaultMessage);
+
+void reject(String errorCode, @Nullable Object[] errorArgs, 
+            @Nullable String defaultMessage);
+~~~
+- rejectValue (reject 동일)
+  - field : 오류 필드명
+  - errorCode : 오류 코드 (messageResolver)
+  - errorArgs : 오류 메시지에서 {0}에 치환하기 위한 값
+  - defaultMessage : 오류 메시지를 찾을 수 없을 때 사용하는 기본 메시지
+
+- _Controller(addItemV4)_
+~~~java
+// 특정 field 예외 (itemName, price, quantity)
+bindingResult.rejectValue("itemName", "required");
+bindingResult.rejectValue("price","range", new Object[]{1000,1000000}, null);
+bindingResult.rejectValue("quantity","max", new Object[]{9999}, null);
+
+// 전체 예외
+bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
+~~~
+
+
 <br>
 
 > [출처] 스프링 MVC 2 - 김영한, 인프런
