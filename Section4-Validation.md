@@ -143,7 +143,9 @@ public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, 
 ~~~ java
 // ObjectError도 유사한 생성자 제공
 public FieldError(String objectName, String field, String defaultMessage);
-public FieldError(String objectName, String field, @Nullable Object rejectedValue, boolean bindingFailure, @Nullable String[] codes, @Nullable Object[] arguments, @Nullable String defaultMessage)
+public FieldError(String objectName, String field, @Nullable Object rejectedValue,
+                  boolean bindingFailure, @Nullable String[] codes, 
+                  @Nullable Object[] arguments, @Nullable String defaultMessage)
 ~~~
 - objectNmae : 오류가 발생한 객체 이름
 - field : 오류 필드
@@ -179,10 +181,9 @@ totalPriceMin=가격 * 수량의 합은 {0}원 이상이어야 합니다. 현재
 ~~~
 - _controller(addItemV3)_
 ~~~java
-bindingResult.addError(new FieldError
-  ("item", "price", item.getPrice(), false,
-    new String[]{"range.item.price"}, 
-    new Object[]{1000, 1000000}, null));
+bindingResult.addError(new FieldError("item", "price", 
+                       item.getPrice(), false, new String[]{"range.item.price"},
+                       new Object[]{1000, 1000000}, null));
 // "가격은 1000 ~ 1000000 까지 허용합니다."
 ~~~
 - codes : properties에 설정된 메시지 코드 지정. 배열로 여러 값을 전달하여 순서대로 매칭함
@@ -202,8 +203,7 @@ void reject(String errorCode, @Nullable Object[] errorArgs,
   - field : 오류 필드명
   - errorCode : 오류 코드 (messageResolver)
   - errorArgs : 오류 메시지에서 {0}에 치환하기 위한 값
-  - defaultMessage : 오류 메시지를 찾을 수 없을 때 사용하는 기본 메시지
-
+  - defaultMessage : 오류 메시지가 없을 때 사용하는 기본 메시지
 - _Controller(addItemV4)_
 ~~~java
 // 특정 field 예외 (itemName, price, quantity)
@@ -214,7 +214,37 @@ bindingResult.rejectValue("quantity","max", new Object[]{9999}, null);
 // 전체 예외
 bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
 ~~~
+<br>
 
+### 오류 코드와 메시지 처리 3
+- 오류 코드의 범용성 또는 구체성 중 고려해야 함
+- 메시지 단계를 나누어 사용 가능
+  - 객체명과 필드명을 조합한 구체적인 메시지 코드가 있으면 높은 우선 순위로 사용
+<br>
+
+### 오류 코드와 메시지 처리 4
+#### MessageCodesResolver
+- 검증 오류 코드로 메시지 코드를 생성함
+- MessageCodesResolver 인터페이스, DefaultMessageCodesResolver 기본 구현체
+
+#### DefaultMessageCodesResolver
+- 객체 오류인 경우
+  - code + "." + object name 
+  - code
+  - _ex) required, object name-item
+  -> required.item, required_ 
+- 필드 오류인 경우
+  - code + "." + object name + "." + field
+  - code + "." + field
+  - code + "." + field type
+  - code
+- 동작 방식
+  - rejectValue(), reject()는 내부에서 MessageCodesResolver를 사용하여 메시지 코드를 생성
+  - Resolver를 통해 생성된 순서대로 오류 코드들을 보관
+- 오류 메시지 출력
+  - 타임리프 화면 렌더링에서 th:error가 실행됨
+  - 오류가 있다면 생성된 오류 메시지 코드를 순서대로 찾아 출력
+  - 없다면 디폴트 메시지 출력
 
 <br>
 
