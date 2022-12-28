@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -156,8 +157,16 @@ public class ValidationItemControllerV2 {
     @PostMapping("/add")
     public String addItemV4(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
+//        if (bindingResult.hasErrors()) {
+//            log.info("errors={}", bindingResult);
+//            return "validation/v2/addForm";
+//        }
+
         log.info("objectName={}", bindingResult.getObjectName());
         log.info("target={}", bindingResult.getTarget());
+
+//        // 검증 로직 (공백 같은 단순한 기능만 제공)
+//        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "itemName", "required");
 
         // 검증 로직
         if (!StringUtils.hasText(item.getItemName())){
