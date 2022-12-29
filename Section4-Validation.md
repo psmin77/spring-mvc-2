@@ -245,7 +245,63 @@ bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
   - 타임리프 화면 렌더링에서 th:error가 실행됨
   - 오류가 있다면 생성된 오류 메시지 코드를 순서대로 찾아 출력
   - 없다면 디폴트 메시지 출력
-
 <br>
+
+### 오류 코드와 메시지 처리 5
+- 메시지 코드는 구체적 > 범용적으로 사용해야 함
+- _errors.properties_
+  - _Level1 > 4 순서로_
+~~~
+#==FieldError==
+#Level1
+required.item.itemName=상품 이름은 필수입니다.
+range.item.price=가격은 {0} ~ {1} 까지 허용합니다.
+max.item.quantity=수량은 최대 {0} 까지 허용합니다.
+      
+#Level2 - 생략
+
+#Level3
+required.java.lang.String = 필수 문자입니다.
+required.java.lang.Integer = 필수 숫자입니다.
+min.java.lang.String = {0} 이상의 문자를 입력해주세요.
+min.java.lang.Integer = {0} 이상의 숫자를 입력해주세요.
+range.java.lang.String = {0} ~ {1} 까지의 문자를 입력해주세요. 
+range.java.lang.Integer = {0} ~ {1} 까지의 숫자를 입력해주세요. 
+max.java.lang.String = {0} 까지의 문자를 허용합니다. 
+max.java.lang.Integer = {0} 까지의 숫자를 허용합니다.
+
+#Level4
+required = 필수 값 입니다.
+min= {0} 이상이어야 합니다.
+range= {0} ~ {1} 범위를 허용합니다. 
+max= {0} 까지 허용합니다.
+~~~
+- 오류 코드와 메시지 처리 순서
+  - rejectValue() 호출
+  - MessageCodesResolver로 오류 코드를 통해 메시지 코드들을 생성
+  - new FieldError()를 생성하고 메시지 코드들을 보관
+  - th:errors에서 해당 메시지 코드들을 순서대로 찾아 출력
+
+#### ValidationUtils
+~~~java
+ValidationUtils.rejectIfEmptyOrWhitespace
+               (bindingResult, "itemName", "required");
+~~~
+- 공백(empty) 같은 단순한 기능만 제공
+<br>
+
+### 오류 코드와 메시지 처리 6
+- 검증 오류 코드
+  - 직접 설정한 오류 코드
+  - 스프링 기본 오류 메시지 (주로 타입 오류)
+    - 메시지 코드를 별도 설정하면 해당 메시지 출력
+    - _error.properties_
+    ~~~
+    typeMismatch.java.lang.Integer=숫자를 입력해주세요.
+    typeMismatch=타입 오류입니다.
+    ~~~
+    
+<br>
+
 
 > [출처] 스프링 MVC 2 - 김영한, 인프런
