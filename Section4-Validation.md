@@ -1,4 +1,4 @@
-### 검증 요구사항
+## 검증 요구사항
 - 타입 검증
   - 가격, 수량에 문자 허용하지 않음
 - 필드 검증
@@ -9,7 +9,7 @@
   - 가격 * 수량의 합은 10,000원 이상
 <br>
 
-### 프로젝트 V1
+## 프로젝트 V1
 ~~~ java
 @PostMapping("/add")
 public String addItem(@ModelAttribute Item item, RedirectAttributes redirectAttributes, Model model) {
@@ -74,8 +74,8 @@ public String addItem(@ModelAttribute Item item, RedirectAttributes redirectAttr
 - th:classappend 도 가능 ( _ : No-Operation)
 <br>
 
-### 프로젝트 V2
-#### BindingResult (addItemV1)
+## 프로젝트 V2
+### BindingResult (addItemV1)
 ~~~ java
 @PostMapping("/add")
 public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
@@ -129,17 +129,17 @@ public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, 
 - th:errorclass : 지정한 필드에 오류가 있으면 class 정보 추가
 <br>
 
-##### @ModelAttribute 바인딩 타입 오류 발생 시
+#### @ModelAttribute 바인딩 타입 오류 발생 시
 - BindingResult가 없으면, 400 오류 페이지로 이동
 - BindingResult가 있으면, 오류 정보(FieldError)를 BindingResult에 담아서 컨트롤러 정상 호출
 
-##### BindingResult와 Errors
+#### BindingResult와 Errors
 - BingdingResult는 Errors 인터페이스를 상속받는 인터페이스
 - Errors는 단순 오류 저장과 조회 기능을 제공
 - BindingResult는 추가적인 기능을 제공하기 때문에, 주로 관례상 BindingResult를 사용함
 <br>
 
-#### FieldError, ObjectError (addItemV2)
+### FieldError, ObjectError (addItemV2)
 ~~~ java
 // ObjectError도 유사한 생성자 제공
 public FieldError(String objectName, String field, String defaultMessage);
@@ -156,17 +156,17 @@ public FieldError(String objectName, String field, @Nullable Object rejectedValu
 - arguments : 메시지에서 사용하는 인자
 - defaultMessage : 기본 오류 메시지
 
-#### 타임리프 사용자 입력 값 유지
+### 타임리프 사용자 입력 값 유지
 - th:field="*{...}"
   - 일반적인 상황에서는 모델 객체의 값을 사용함
   - 오류가 발생하는 경우, FieldError에서 보관한 값을 사용함
 
-#### 스프링 바인딩 오류 처리
+### 스프링 바인딩 오류 처리
 - 타입 오류로 바인딩에 실패하는 경우, 스프링은 FieldError를 생성하여 사용자가 입력한 값을 넣은 뒤 BindingResult에 담아 컨트롤러를 호출함
 <br>
 
-### 오류 코드와 메시지 처리 1
-#### Errors.properties (addItemV3)
+## 오류 코드와 메시지 처리 1
+### Errors.properties (addItemV3)
 - 스프링 부트 메시지 설정 추가
 - _application.properties_
 ~~~
@@ -190,8 +190,8 @@ bindingResult.addError(new FieldError("item", "price",
 - arguments : Object[]{...} 배열로 지정하여 코드의 {0},{1}로 치환할 값을 전달함
 <br>
 
-### 오류 코드와 메시지 처리 2
-#### rejectValue, reject (addItemV4)
+## 오류 코드와 메시지 처리 2
+### rejectValue, reject (addItemV4)
 ~~~java
 void rejectValue (@Nullable String field, String errorCode, 
                   @Nullable Object[] errorArgs, @Nullable String defaultMessage);
@@ -216,18 +216,18 @@ bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
 ~~~
 <br>
 
-### 오류 코드와 메시지 처리 3
+## 오류 코드와 메시지 처리 3
 - 오류 코드의 범용성 또는 구체성 중 고려해야 함
 - 메시지 단계를 나누어 사용 가능
   - 객체명과 필드명을 조합한 구체적인 메시지 코드가 있으면 높은 우선 순위로 사용
 <br>
 
-### 오류 코드와 메시지 처리 4
-#### MessageCodesResolver
+## 오류 코드와 메시지 처리 4
+### MessageCodesResolver
 - 검증 오류 코드로 메시지 코드를 생성함
 - MessageCodesResolver 인터페이스, DefaultMessageCodesResolver 기본 구현체
 
-#### DefaultMessageCodesResolver
+### DefaultMessageCodesResolver
 - 객체 오류인 경우
   - code + "." + object name 
   - code
@@ -247,7 +247,7 @@ bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
   - 없다면 디폴트 메시지 출력
 <br>
 
-### 오류 코드와 메시지 처리 5
+## 오류 코드와 메시지 처리 5
 - 메시지 코드는 구체적 > 범용적으로 사용해야 함
 - _errors.properties_
   - _Level1 > 4 순서로_
@@ -282,7 +282,7 @@ max= {0} 까지 허용합니다.
   - new FieldError()를 생성하고 메시지 코드들을 보관
   - th:errors에서 해당 메시지 코드들을 순서대로 찾아 출력
 
-#### ValidationUtils
+### ValidationUtils
 ~~~java
 ValidationUtils.rejectIfEmptyOrWhitespace
                (bindingResult, "itemName", "required");
@@ -290,7 +290,7 @@ ValidationUtils.rejectIfEmptyOrWhitespace
 - 공백(empty) 같은 단순한 기능만 제공
 <br>
 
-### 오류 코드와 메시지 처리 6
+## 오류 코드와 메시지 처리 6
 - 검증 오류 코드
   - 직접 설정한 오류 코드
   - 스프링 기본 오류 메시지 (주로 타입 오류)
@@ -303,5 +303,31 @@ ValidationUtils.rejectIfEmptyOrWhitespace
     
 <br>
 
+## Validator 1
+### Validator
+~~~java
+public interface Validator {
+  boolean supports(Class<?> clazz);
+  void validate(Object target, Errors errors);
+}
+~~~
+- supports() {} : 해당 검증기를 지원하는 여부 확인
+- validate(Object target, Errors errors) : 검증 대상 객체와 BindingResult
+
+### ItemValidator (addItemV5)
+- ItemValidator를 생성하여 검증 로직을 별도 분리
+- _Controller(addItemV5)_
+~~~java
+private final ItemValidator itemValidator;
+...
+  itemValidator.validate(item, bindingResult);
+~~~
+- ItemValidator를 스프링 빈으로 주입 받아 직접 호출
+<br>
+
+## Validator 2
+###
+
+<br>
 
 > [출처] 스프링 MVC 2 - 김영한, 인프런
