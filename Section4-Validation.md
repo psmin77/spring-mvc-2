@@ -326,8 +326,25 @@ private final ItemValidator itemValidator;
 <br>
 
 ## Validator 2
-###
-
+### WebDataBinder
+~~~java
+@InitBinder
+public void init(WebDataBinder dataBinder){
+  dataBinder.addValiators(itemValidator);
+}
+~~~
+- 스프링의 파라미터 바인딩 역할과 검증 기능도 포함
+- @InitBinder : 해당 컨트롤러에만 영향
+- _Controller(addItemV6)_
+~~~java
+@PostMapping("/add")
+public String addItemV6(@Validated @ModelAttribute Item item, 
+                        BindingResult bindingResult, 
+                        RedirectAttributes redirectAttributes) {
+~~~
+- @Validated : 검증기를 실행하는 애노테이션
+  - 검증 대상 파라미터 앞에 추가
+  - _ItemValidator 실행_
 <br>
 
 > [출처] 스프링 MVC 2 - 김영한, 인프런
