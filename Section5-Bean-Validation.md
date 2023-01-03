@@ -29,4 +29,16 @@ public class Item {
   - @Max(0) : 최대값 설정
 <br>
 
+### 스프링 적용
+- _ValidationItemController_
+  - ItemValidator 제거
+  - @Valid(javax), @Validated(spring) : 스프링 부트 글로벌 Validator 적용
+  - cf. 다른 글로벌 Validator 설정 시에는 작동하지 않기 때문에 주의
+- 검증 순서
+  - @ModelAttribute 각각의 필드에 타입 변환 시도
+  - 실패하면 typeMismatch로 FieldError 추가
+  - (바인딩에 성공한 필드만) Bean Validator 적용
+
+<br>
+
 > [출처] 스프링 MVC 2 - 김영한, 인프런
