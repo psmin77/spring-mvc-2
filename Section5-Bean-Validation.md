@@ -31,13 +31,43 @@ public class Item {
 
 ### 스프링 적용
 - _ValidationItemController_
-  - ItemValidator 제거
+  - 검증기(ItemValidator) 제거
   - @Valid(javax), @Validated(spring) : 스프링 부트 글로벌 Validator 적용
-  - cf. 다른 글로벌 Validator 설정 시에는 작동하지 않기 때문에 주의
+  - cf. 다른 글로벌 Validator 설정 시에는 작동하지 않으므로 주의
 - 검증 순서
   - @ModelAttribute 각각의 필드에 타입 변환 시도
   - 실패하면 typeMismatch로 FieldError 추가
   - (바인딩에 성공한 필드만) Bean Validator 적용
+<br>
+
+### 에러 코드
+- @NotBlank(Range) : 구체적 > 범용적 범위
+  - NotBlank(Range).item.itemName
+  - NotBlank(Range).itemName
+  - NotBlank(Range).java.lang.String
+  - NotBlank(Range)
+- _errors.properties_
+  ~~~
+  #Bean Validation 추가
+  NotBlank={0} 공백X
+  Range={0}, {2}~{1} 허용
+  Max={0}, 최대 {1}
+  ~~~
+  - {0} 필드명
+  - {1},{2}... 각 애노테이션
+- BeanValidation 순서
+  - 생성된 메시지 순서대로 messageSource에서 찾기
+  - 애노테이션의 message 속성 사용
+    - @NotBlank(message="공백은 입력할 수 없습니다.")
+  - 라이브러리가 제공하는 기본 값 사용
+<br>
+
+## 오브젝트 오류
+- @ScriptAssert() : 특정 필드가 아닌 오브젝트 관련 오류에 사용
+- 제약이 많고 복잡하여 권장하지 않음
+- 자바 코드(조건식 등)로 직접 작성하는 것 권장
+<br>
+
 
 <br>
 
