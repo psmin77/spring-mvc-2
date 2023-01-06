@@ -68,6 +68,24 @@ public class Item {
 - 자바 코드(조건식 등)로 직접 작성하는 것 권장
 <br>
 
+## 수정 폼 적용
+### 수정 요구사항
+- 등록 수량 최대 9999 제한, 수정 수량 제한 없음
+- 등록 id 존재하지 않음, 수정 id 필수 값
+
+### 수정 방안
+1. BeanValidation의 groups 기능
+2. ItemSaveForm, ItemUpdateForm으로 모델 객체를 나누어 사용
+
+### groups
+- 저장/수정용 groups(interface) 생성
+  - SaveCheck / UpdateCheck
+- 모델 객체 애노테이션 적용
+  - SaveCheck.class / UpdateCheck.class
+  - _(groups = {SaveCheck.class, UpdateCheck.class})_
+- 저장 로직에 groups 적용
+  - _@Validated(SaveCheck.class / UpdateCheck.class)_
+  - cf. @Valid에는 groups가 없음
 
 <br>
 
