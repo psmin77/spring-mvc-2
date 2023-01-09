@@ -86,6 +86,49 @@ public class Item {
 - 저장 로직에 groups 적용
   - _@Validated(SaveCheck.class / UpdateCheck.class)_
   - cf. @Valid에는 groups가 없음
+<br>
+
+## Form 전송 객체 분리
+### 프로젝트 V4
+- 실무에서는 groups를 잘 사용하지 않음
+- 일반적으로 상황에 따라 별도의 객체를 만들어 사용함
+  - 등록: ItemSaveForm, 수정: ItemUpdateForm
+~~~java
+@PostMapping("/add")
+public String addItem(@Validated @ModelAttribute("item") ItemSaveForm form,
+                      BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+  
+  ...
+  
+  //성공 로직
+  Item item = new Item();
+  item.setItemName(form.getItemName());
+  item.setPrice(form.getPrice());
+  item.setQuantity(form.getQuantity());
+  Item savedItem = itemRepository.save(item);
+  
+  ...
+}
+~~~
+- _Controller_
+  - @ModelAttribute ItemSave/UpdateForm 으로 받고
+  - 로직 내에서 폼 객체를 기반으로 Item 객체를 다시 만들어 전송
+<br>
+
+## HTTP 메시지 컨버터
+### API
+- 주로 API 요청을 다루는 HTTP Body의 데이터 전송 시에도 사용 가능 (@RequestBody)
+- 3가지 경우
+  - 성공 요청: 성공
+  - 실패 요청: JSON 객체 생성 자체를 실패
+  - 검증 오류 요청: JSON 객체 생성은 성공했으나 검증에 실패
+- 비교
+  - @ModelAttribute
+    - 필드 단위로 정교한 바인딩 적용
+    - 특정 필드 오류가 발생해도 나머지 필드는 정상 처리
+  - HttpMessageConverter(@RequestBody)
+    - 전체 객체 단위로 적용
+    - 메시지 컨버터 작동이 성공해서 객체를 만들어야 적용 가능
 
 <br>
 
